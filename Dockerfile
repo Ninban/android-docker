@@ -1,22 +1,20 @@
 FROM openjdk:8-jdk
 
-RUN apt-get --quiet update --yes \
-    && apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 \
-    && wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip \
-    && unzip android-sdk.zip -d android-sdk-linux
+ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
+    ANDROID_HOME="/android-sdk" \
+    ANDROID_VERSION=27 \
+    ANDROID_BUILD_TOOLS_VERSION=26.1.1
 
-RUN echo y | android-sdk-linux/tools/bin/sdkmanager update sdk --no-ui --all --filter android-27
+# Download Android SDK
+RUN mkdir "$ANDROID_HOME" .android \
+    && cd "$ANDROID_HOME" \
+    && curl -o sdk.zip $SDK_URL \
+    && unzip sdk.zip \
+    && rm sdk.zip \
+    && yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter platform-tools
-
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter build-tools-27.0.3
-
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-android-m2repository
-
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-google_play_services
-
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-m2repository
-
-RUN export ANDROID_HOME=$PWD/android-sdk-linux \
-    && export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/ \
-    && export GRADLE_USER_HOME=$PWD/.gradle
+# Install Android Build Tool and Libraries
+RUN $ANDROID_HOME/tools/bin/sdkmanager --update
+RUN $ANDROID_HOME/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS_VERSION}" \
+    "platforms;android-${ANDROID_VERSION}" \
+    "platform-tools"
