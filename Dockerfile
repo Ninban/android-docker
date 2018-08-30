@@ -2,7 +2,7 @@ FROM openjdk:8-jdk
 
 RUN apt-get --quiet update --yes \
     && apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 \
-    && wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip \
+    && wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip \
     && unzip android-sdk.zip -d android-sdk-linux
 
 RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter android-27
