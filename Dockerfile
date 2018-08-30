@@ -3,7 +3,7 @@ FROM openjdk:8-jdk
 ENV SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip" \
     ANDROID_HOME="/android-sdk" \
     ANDROID_VERSION=27 \
-    ANDROID_BUILD_TOOLS_VERSION=26.1.1
+    ANDROID_BUILD_TOOLS_VERSION=26.0.2
 
 # Download Android SDK
 RUN mkdir "$ANDROID_HOME" .android \
