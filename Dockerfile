@@ -20,5 +20,3 @@ RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all -
 RUN export ANDROID_HOME=$PWD/android-sdk-linux \
     && export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/ \
     && export GRADLE_USER_HOME=$PWD/.gradle
-
-    https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
