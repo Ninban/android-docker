@@ -5,8 +5,8 @@ ENV ANDROID_COMPILE_SDK=27 \
     ANDROID_SDK_TOOLS=24.4.1
 
 RUN apt-get --quiet update --yes >log.txt &&\
-    apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 >log.txt \
-    apt-get --quiet install ruby-full --yes >log.txt \
+    apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 >log.txt &&\
+    apt-get --quiet install ruby-full --yes >log.txt &&\
     apt-get --quiet install build-essential --yes >log.txt
 
 RUN wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android/android-sdk_r${ANDROID_SDK_TOOLS}-linux.tgz &&\
