@@ -16,3 +16,7 @@ RUN wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android
     echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-android-m2repository &&\
     echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-google_play_services &&\
     echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-m2repository
+
+RUN apt-get install rubygems
+
+RUN gem install bundler
