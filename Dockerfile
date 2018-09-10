@@ -20,3 +20,5 @@ RUN wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android
     echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-m2repository
 
 RUN gem install bundler
+
+RUN gem install fastlane
