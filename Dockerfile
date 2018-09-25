@@ -1,7 +1,7 @@
 FROM openjdk:8-jdk
 
 ENV ANDROID_COMPILE_SDK=27 \
-    ANDROID_BUILD_TOOLS=27.0.3 \
+    ANDROID_BUILD_TOOLS=28.0.2 \
     ANDROID_SDK_TOOLS=24.4.1
 
 RUN apt-get --quiet update --yes >log.txt &&\
