@@ -1,23 +1,26 @@
 FROM openjdk:8-jdk
 
-ENV ANDROID_COMPILE_SDK=29 \
-    ANDROID_BUILD_TOOLS=28.0.3 \
-    ANDROID_SDK_TOOLS=24.4.1
+ENV ANDROID_COMPILE_SDK 29
+ENV ANDROID_BUILD_TOOLS 29.0.3
+ENV ANDROID_SDK_TOOLS 30.0.4
+ENV ANDROID_HOME /android-sdk-linux
 
-RUN apt-get --quiet update --yes >>log.txt &&\
+RUN apt-get --quiet update --yes >>log.txt && \
     apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 ruby-dev make g++>>log.txt
 
 RUN echo 'gem: --no-document' > /etc/gemrc
 
-RUN wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android/android-sdk_r${ANDROID_SDK_TOOLS}-linux.tgz
+RUN mkdir cmdline-tools
+WORKDIR cmdline-tools
 
-RUN echo Extracting tools
-    
-RUN tar --extract --gzip --file=android-sdk.tgz
+RUN wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-6609375_latest.zip && \
+    echo Extracting tools && \
+    unzip android-sdk.zip && \
+    rm android-sdk.zip
 
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter android-${ANDROID_COMPILE_SDK}
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter platform-tools
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter build-tools-${ANDROID_BUILD_TOOLS}
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-android-m2repository
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-google_play_services
-RUN echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-m2repository
+RUN yes | tools/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses
+RUN tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-29"
+RUN tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "build-tools;${ANDROID_BUILD_TOOLS}"
+RUN tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "extras;android;m2repository"
+RUN tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "extras;google;google_play_services"
+RUN tools/bin/sdkmanager --sdk_root=$ANDROID_HOME "extras;google;m2repository"
